@@ -1,0 +1,291 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define MAX_COURSES 5
+#define MAX_STUDENTS 5
+typedef struct {
+char courseName[50];
+int courseID;
+int seats;
+char date[20]; // New field for course date
+char time[20]; // New field for course time
+char classroom[20]; // New field for classroom number
+} Course;
+typedef struct {
+char studentName[50];
+int studentID;
+int enrolledCourses[MAX_COURSES];
+int numCourses;
+} Student;
+Course courses[MAX_COURSES] = {
+{"Mathematics", 1, 3, "2024-12-01", "10:00 AM", "Room 101"},
+{"Physics", 2, 3, "2024-12-02", "02:00 PM", "Room 102"},
+{"Chemistry", 3, 3, "2024-12-03", "11:00 AM", "Room 103"},
+{"Biology", 4, 3, "2024-12-04", "01:00 PM", "Room 104"},
+{"English", 5, 3, "2024-12-05", "09:00 AM", "Room 105"}
+};
+Student students[MAX_STUDENTS];
+int studentCount = 0;
+void viewCourses() {
+printf("Available Courses in our collge\n");
+printf(" PLB \n");
+printf(" AP\n");
+printf(" BET\n");
+printf(" EG\n");
+printf(" MATHS\n");
+}
+
+void registerStudent() {
+if (studentCount >= MAX_STUDENTS) {
+printf("Student limit reached.\n");
+return;
+}
+printf("Enter student name: ");
+scanf(" %hhd[^\n]", students[studentCount].studentName);
+students[studentCount].studentID = studentCount + 1;
+students[studentCount].numCourses = 0;
+printf("Student registered with ID: B24IT10%d\n", students[studentCount].studentID);
+studentCount++;
+}
+void enrollInCourse() {
+int studentID, courseID;
+if (studentCount == 0) {
+printf("No students registered. Please register a student first.\n");
+return;
+}
+printf("Enter student ID: ");
+if (scanf("%d", &studentID) != 1) {
+printf("Invalid input. Please enter a numeric student ID.\n");
+while (getchar() != '\n'); // Clear invalid input
+return;
+}
+if (studentID < 1 || studentID > studentCount) {
+printf("Invalid student ID.\n");
+return;
+}
+printf("Enter course ID to enroll: ");
+printf("1--mathematics");
+printf("2--physics");
+printf("3--chemistry");
+printf("4--biolaogy");
+printf("5--english");
+if (scanf("%d", &courseID) != 1) {
+printf("Invalid input. Please enter a numeric course ID.\n");
+while (getchar() != '\n'); // Clear invalid input
+return;
+}
+if (courseID < 1 || courseID > MAX_COURSES) {
+printf("Invalid course ID.\n");
+return;
+}
+Student *student = &students[studentID - 1];
+Course *course = &courses[courseID - 1];
+if (course->seats == 0) {
+printf("No seats available in %s.\n", course->courseName);
+return;
+}
+if (student->numCourses >= MAX_COURSES) {
+printf("Student already enrolled in maximum courses.\n");
+return;
+}
+student->enrolledCourses[student->numCourses++] = courseID;
+course->seats--;
+printf("Enrolled in %s successfully.\n", course->courseName);
+}
+void viewStudentSchedule() {
+int ch;
+printf("1---monday\n");
+printf("2---tuesday\n");
+printf("3---wednesday\n");
+printf("4---thursday\n");
+printf("5---friday\n");
+printf("6---saturday\n");
+printf("7---sunday\n");
+scanf("%d",&ch);
+switch(ch)
+{
+case 1:
+printf("monday\n");
+printf("AP\nBET\nEG\nEG\nM1\nBET\n");
+break;
+case 2:
+printf("tuesday\n");
+printf("plb tut\nM1\nEEL\nEEL\nICC A\nBET\n");
+break;
+case 3:
+printf("wednesdat\n");
+printf("AP\nBET\nEG\nEG\nM1\nBET\n");
+break;
+case 4:
+printf("thursday\n");
+printf("plb tut\nM1\nEEL\nEEL\nICC A\nBET\n");
+break;
+case 5:
+printf("friday\n");
+printf("plb tut\nM1\nEEL\nEEL\nICC A\nBET\n");
+break;
+case 6:
+printf("saturday\n");
+printf("HOLIDAY");
+break;
+case 7:
+printf("sunday\n");
+printf("HOLIDAY");
+break;
+
+}
+}
+void adminTasks() {
+int adminChoice;
+do {
+printf("\nAdmin Tasks:\n");
+printf("1. View All Students\n");
+printf("2. Reset Course Seats\n");
+printf("3. Back to Main Menu\n");
+printf("Enter your choice: ");
+
+if (scanf("%d", &adminChoice) != 1) {
+printf("Invalid input. Please enter a numeric choice.\n");
+while (getchar() != '\n'); // Clear invalid input
+continue;
+}
+switch (adminChoice) {
+case 1: {
+printf("\nRegistered Students:\n");
+for (int i = 0; i < studentCount; i++) {
+printf("ID: %d, Name: %s, Enrolled Courses: %d\n",
+students[i].studentID,
+students[i].studentName,
+students[i].numCourses);
+}
+if (studentCount == 0) {
+printf("No students registered.\n");
+}
+break;
+}
+case 2: {
+for (int i = 0; i < MAX_COURSES; i++) {
+courses[i].seats = 3; // Resetting seats to the initial value (3).
+}
+printf("Course seats have been reset.\n");
+break;
+}
+case 3:
+printf("Returning to Main Menu...\n");
+break;
+default:
+printf("Invalid choice. Please choose from the given options.\n");
+}
+} while (adminChoice != 3);
+}
+
+void studentspot() {
+int ch;
+printf("SELECT COURSE\n");
+printf("1--plb\n2--AP\n3--BET\n4--MATHS\n5--EG\n");
+scanf("%d", &ch); // Add this line to get input from the user
+switch(ch) {
+case 1:
+printf("PLB\n");
+printf("UNIT 1\n");
+printf("Define an Algorithm ? What are the characteristics of an algorithm?\n");
+printf("Explain Guidelines for writting Pseudo code ?\n");
+printf("Explain the purpose of a process flowchart. How does it differ from a data flowchart?\n");
+printf("List the different types of flowcharts and briefly describe the primary use of each.\n");
+printf("Explain Guidelines for writting algorithm?\n");
+printf("Explain the purpose of a process flowchart. How does it differ from a diffrent flowchart?\n");
+printf("List the different types of flowcharts and briefly describe the primary use of each.\n");
+break;
+case 2:
+printf("AP\n");
+printf("UNIT 1\n");
+printf("Explain the phenomenon of double refraction in calcite.\n");
+printf("Explain the Law of Malus.\n");
+printf("Explain the phenomenon of total internal reflection.\n");
+printf("Explain the phenomenon of dispersion.\n");
+printf("Explain the phenomenon of polarization.\n");
+printf("Explain the phenomenon of diffraction.\n");
+printf("Explain the phenomenon of interference\n");
+break;
+case 3:
+printf("BET\n");
+printf("UNIT 1\n");
+printf("Define Resistivity of the material\n");
+printf("State & explain Ohm’s law\n");
+printf("Explain the concept of Tariff.");
+printf("Define Wheeling Charegs & Fixed Charges ?\n");
+printf("Define Energy Charges & Sanctioned Load.\n");
+printf("Define Electrical Work , Power & Energy with their units.\n");
+printf("Explain resistance and factors affecting resistance?\n");
+break;
+case 4:
+printf("MATHS\n");
+printf("UNIT 1\n");
+printf("What is the value of pi upto two decimal places?\n");
+printf("calculate 2*46+455\n");
+printf("find graph of 2x^2+3x-5\n");
+printf("find graph of 3x^2+5x-55\n");
+break;
+case 5:
+printf("EG\n");
+printf("UNIT 1\n");
+printf("Explain the difference between first-angle and third-angle projection.\n");
+printf("What is the purpose of the centerline in a mechanical drawing?\n");
+printf("Describe the process of dimensioning a hole in an engineering drawing.\n");
+break;
+default:
+printf("Invalid choice\n");
+}
+}
+
+void mainMenu() {
+int choice;
+do {
+printf("\nCourse Registration System\n");
+printf("1. View Courses\n");
+printf("2. Register Student\n");
+printf("3. Enroll in Course\n");
+printf("4. View Student Schedule\n");
+printf("5. Admin Tasks\n");
+printf("6. studentspot\n");
+printf("7. Exit\n");
+printf("Enter your choice:\n ");
+
+if (scanf("%d", &choice) != 1) {
+printf("Invalid input. Please choose from the given options.\n");
+while (getchar() != '\n'); // Clear invalid input
+continue;
+}
+switch (choice) {
+case 1:
+viewCourses();
+break;
+case 2:
+registerStudent();
+break;
+case 3:
+enrollInCourse();
+break;
+case 4:
+viewStudentSchedule();
+break;
+case 5:
+adminTasks();
+break;
+case 6:
+studentspot();
+break;
+case 7:
+printf("Exiting...\n");
+printf("THANKYOU FOR USING COURSE REGISTRATION SYSTEM\n");
+break;
+default:
+printf("Invalid choice. Please choose from the given options.\n");
+}
+} while (choice != 6);
+}
+int main() {
+mainMenu();
+return 0;
+}
+
